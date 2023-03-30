@@ -1,22 +1,15 @@
-use clap::Parser;
+mod commands;
 
-/// Simple program to greet a person
-#[derive(Parser, Debug)]
-#[command(author, version, about, long_about = None)]
-struct Args {
-    /// Name of the person to greet
-    #[arg(short, long)]
-    name: String,
-
-    /// Number of times to greet
-    #[arg(short, long, default_value_t = 1)]
-    count: u8,
-}
+use commands::{create::handler as create_handler, make_commands};
 
 fn main() {
-    let args = Args::parse();
+    let commands = make_commands();
+    let matches = commands.get_matches();
 
-    for _ in 0..args.count {
-        println!("Hello {}!", args.name)
+    match matches.subcommand() {
+        Some(("create", sub_matches)) => {
+            create_handler(sub_matches).expect("Error while running create command")
+        }
+        _ => unreachable!(),
     }
 }
