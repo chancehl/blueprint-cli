@@ -10,5 +10,7 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
 
     println!("blueprint={:?}, destination={:?}", blueprint, destination);
 
+    // validate blueprint file
+
     Ok(())
 }

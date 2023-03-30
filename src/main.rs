@@ -1,4 +1,5 @@
 mod commands;
+mod models;
 
 use commands::{create::handler as create_handler, make_commands};
 
