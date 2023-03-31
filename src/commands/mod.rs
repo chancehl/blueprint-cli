@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use clap::{arg, Command};
+use clap::{arg, Arg, ArgAction, Command};
 
 pub mod create;
 pub mod save;
@@ -19,6 +19,12 @@ pub fn make_commands() -> Command {
         .about("Saves a blueprint .json file to the .blueprint folder on disk")
         .arg(
             arg!(<BLUEPRINT> "The blueprint .json file").value_parser(clap::value_parser!(PathBuf)),
+        )
+        .arg(
+            Arg::new("no-validate")
+                .short('v')
+                .long("no-validate")
+                .action(ArgAction::SetFalse),
         )
         .arg_required_else_help(true);
 
