@@ -3,6 +3,7 @@ use std::path::PathBuf;
 use clap::{arg, Command};
 
 pub mod create;
+pub mod save;
 
 pub fn make_commands() -> Command {
     let create_command = Command::new("create")
