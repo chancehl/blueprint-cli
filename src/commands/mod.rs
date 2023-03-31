@@ -14,12 +14,20 @@ pub fn make_commands() -> Command {
         )
         .arg_required_else_help(true);
 
+    let save_command = Command::new("save")
+        .about("Saves a blueprint .json file to the .blueprint folder on disk")
+        .arg(
+            arg!(<BLUEPRINT> "The blueprint .json file").value_parser(clap::value_parser!(PathBuf)),
+        )
+        .arg_required_else_help(true);
+
     let root_command = Command::new("git")
-        .about("A fictional versioning CLI")
+        .about("A simple cli for creating files from templates")
         .subcommand_required(true)
         .arg_required_else_help(true)
         .allow_external_subcommands(true)
-        .subcommand(create_command);
+        .subcommand(create_command)
+        .subcommand(save_command);
 
     root_command
 }
