@@ -51,6 +51,7 @@ impl Blueprint {
         None
     }
 
+    /// Executes the blueprint, asking for template variables and writing to disk or console
     pub fn execute(mut self, loc: Option<&PathBuf>) -> Result<()> {
         // generate template
         for token in &self.tokens {
