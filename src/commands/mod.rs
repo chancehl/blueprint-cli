@@ -20,12 +20,6 @@ pub fn make_commands() -> Command {
         .arg(
             arg!(<BLUEPRINT> "The blueprint .json file").value_parser(clap::value_parser!(PathBuf)),
         )
-        .arg(
-            Arg::new("no-validate")
-                .short('v')
-                .long("no-validate")
-                .action(ArgAction::SetFalse),
-        )
         .arg_required_else_help(true);
 
     let root_command = Command::new("git")

@@ -9,8 +9,8 @@ use std::{
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Blueprint {
+    pub name: String,
     template: String,
-    name: String,
     tokens: Vec<String>,
 }
 
