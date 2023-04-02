@@ -1,34 +1,37 @@
 use clap::ArgMatches;
-use std::{env, fs, path::PathBuf};
+use std::{fs, path::PathBuf};
 
 use crate::models::blueprint::Blueprint;
+use crate::utils::blueprint_dir;
 
 pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
-    let blueprint_json_loc = arg_matches
+    let blueprint_from = arg_matches
         .get_one::<PathBuf>("BLUEPRINT")
         .expect("You must provide the blueprint .json file location");
 
-    let home = env::var("HOME").expect("Could not locate $HOME value");
-
-    let file_contents = fs::read_to_string(blueprint_json_loc).expect("Could not read file");
+    let file_contents = fs::read_to_string(blueprint_from).expect("Could not read file");
+    let blueprint_dir =
+        blueprint_dir::as_pathbuf().expect("Could not crate .blueprint directory name");
 
     match serde_json::from_str::<Blueprint>(&file_contents) {
         Ok(blueprint) => {
-            let location = PathBuf::from(format!("{}/.blueprint/{}.json", home, blueprint.name));
-
-            if !location.exists() {
-                eprintln!("Looks like the {}/.blueprint directory does not exist. Tip: you can run `blueprint init` to create this directory.", home);
+            if !blueprint_dir.exists() {
+                eprintln!("Looks like the {:?} directory does not exist. Tip: you can run `blueprint init` to create this directory.", blueprint_dir.as_os_str());
 
                 return Err(".blueprint dir does not exist");
             }
 
-            fs::copy(blueprint_json_loc, &location)
-                .expect(&format!("Could not write file to {}", location.display()));
+            let blueprint_to = blueprint_dir.join(format!("{}.json", blueprint.name));
+
+            fs::copy(blueprint_from, &blueprint_to).expect(&format!(
+                "Could not write file to {}",
+                blueprint_to.display()
+            ));
 
             println!(
                 "Saved blueprint {} to {}",
                 &blueprint.name,
-                &location.display()
+                &blueprint_to.display()
             );
         }
         Err(err) => {
