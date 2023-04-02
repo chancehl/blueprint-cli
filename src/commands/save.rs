@@ -1,8 +1,7 @@
 use clap::ArgMatches;
 use std::{fs, path::PathBuf};
 
-use crate::models::blueprint::Blueprint;
-use crate::utils::blueprint_dir;
+use crate::models::{blueprint::Blueprint, repository::BlueprintRepository};
 
 pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
     let blueprint_from = arg_matches
@@ -10,8 +9,9 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
         .expect("You must provide the blueprint .json file location");
 
     let file_contents = fs::read_to_string(blueprint_from).expect("Could not read file");
-    let blueprint_dir =
-        blueprint_dir::as_pathbuf().expect("Could not crate .blueprint directory name");
+    let blueprint_dir = BlueprintRepository::new()
+        .to_pathbuf()
+        .expect("Could not initialize blueprint repository");
 
     match serde_json::from_str::<Blueprint>(&file_contents) {
         Ok(blueprint) => {

@@ -1,6 +1,5 @@
 mod commands;
 mod models;
-mod utils;
 
 use commands::{
     create::handler as create_handler, init::handler as init_handler, make_commands,

@@ -1,9 +1,9 @@
 use std::{env::VarError, fs};
 
-use crate::utils::blueprint_dir;
+use crate::models::repository::BlueprintRepository;
 
 pub fn handler() -> Result<(), VarError> {
-    match blueprint_dir::as_pathbuf() {
+    match BlueprintRepository::new().to_pathbuf() {
         Ok(path) => {
             if path.exists() {
                 eprintln!(
