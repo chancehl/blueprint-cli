@@ -16,6 +16,12 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
         Ok(blueprint) => {
             let location = PathBuf::from(format!("{}/.blueprint/{}.json", home, blueprint.name));
 
+            if !location.exists() {
+                eprintln!("Looks like the {}/.blueprint directory does not exist. Tip: you can run `blueprint init` to create this directory.", home);
+
+                return Err(".blueprint dir does not exist");
+            }
+
             fs::copy(blueprint_json_loc, &location)
                 .expect(&format!("Could not write file to {}", location.display()));
 

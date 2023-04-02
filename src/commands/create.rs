@@ -15,7 +15,7 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
             .execute(destination)
             .expect("Could not execute blueprint"),
         None => {
-            eprintln!("Could not locate blueprint with name {0}. Did you mean to save instead?\n\n`blueprint save {0} --template=./{0}.json`", blueprint_name)
+            eprintln!("Could not locate blueprint with name {0}. Did you mean to save instead?\n\n`blueprint save ./{0}.json`", blueprint_name)
         }
     };
 
