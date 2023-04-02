@@ -14,11 +14,16 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
 
     match serde_json::from_str::<Blueprint>(&file_contents) {
         Ok(blueprint) => {
-            fs::copy(
-                blueprint_json_loc,
-                PathBuf::from(format!("{}/.blueprint/{}.json", home, blueprint.name)),
-            )
-            .expect(&format!("Could not write file to {}/.blueprint/", home));
+            let location = PathBuf::from(format!("{}/.blueprint/{}.json", home, blueprint.name));
+
+            fs::copy(blueprint_json_loc, &location)
+                .expect(&format!("Could not write file to {}", location.display()));
+
+            println!(
+                "Saved blueprint {} to {}",
+                &blueprint.name,
+                &location.display()
+            );
         }
         Err(err) => {
             eprintln!("Error while running save command: {:?}", err)
