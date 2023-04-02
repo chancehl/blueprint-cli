@@ -6,7 +6,7 @@ pub fn handler() -> Result<(), &'static str> {
 
     if PathBuf::from(&loc).exists() {
         eprintln!(
-            ".blueprint directory already exists at {}, skipping initialization steps. If you want to force a fresh install, pass the `--force` flag to this command.",
+            "{} directory already exists, skipping initialization steps. If you want to force a fresh install, pass the `--force` flag to this command.",
             loc
         )
     } else {
