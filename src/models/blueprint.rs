@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Result;
 use std::{
-    collections::HashMap,
     env,
     fs::{self, File},
     io::Write,
