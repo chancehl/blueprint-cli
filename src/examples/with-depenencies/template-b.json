@@ -1,6 +1,6 @@
 {
-  "template": "TEMPLATE_B_FILE",
-  "tokens": [],
+  "template": "TEMPLATE_B_FILE_BAR",
+  "tokens": ["BAR"],
   "name": "template-b",
   "dependencies": []
 }

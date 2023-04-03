@@ -71,6 +71,15 @@ impl Blueprint {
             self.template = self.template.replace(token, &value);
         }
 
+        // execute siblings if they exist
+        if let Some(deps) = self.dependencies {
+            for dep in deps {
+                if let Some(blueprint) = Blueprint::seek(dep) {
+                    blueprint.execute(loc).expect("Could not execute blueprint")
+                }
+            }
+        }
+
         // write file to disk
         if let Some(path) = loc {
             let mut output =
