@@ -1,12 +1,18 @@
 use std::path::PathBuf;
 
-use clap::{arg, Command};
+use clap::{arg, Arg, ArgAction, Command};
 
 pub mod create;
 pub mod init;
 pub mod save;
 
 pub fn make_commands() -> Command {
+    // shared args
+    let force_arg = Arg::new("FORCE")
+        .short('f')
+        .long("force")
+        .action(ArgAction::SetTrue);
+
     let create_command = Command::new("create")
         .about("Creates a file from a blueprint")
         .arg(arg!(<BLUEPRINT> "Which blueprint file to use"))
@@ -16,8 +22,9 @@ pub fn make_commands() -> Command {
         )
         .arg_required_else_help(true);
 
-    let init_command =
-        Command::new("init").about("Initializes tool by creating the .blueprint directory for you");
+    let init_command = Command::new("init")
+        .about("Initializes tool by creating the .blueprint directory for you")
+        .arg(force_arg);
 
     let save_command = Command::new("save")
         .about("Saves a blueprint .json file to the .blueprint folder on disk")

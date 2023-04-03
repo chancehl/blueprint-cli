@@ -18,7 +18,9 @@ fn main() {
         Some(("save", sub_matches)) => {
             save_handler(sub_matches).expect("Error while running save command")
         }
-        Some(("init", _sub_matches)) => init_handler().expect("Error while running init command"),
+        Some(("init", sub_matches)) => {
+            init_handler(sub_matches).expect("Error while running init command")
+        }
         _ => unreachable!(),
     }
 }
