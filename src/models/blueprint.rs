@@ -1,11 +1,14 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Result;
 use std::{
+    collections::HashMap,
     env,
     fs::{self, File},
     io::Write,
     path::PathBuf,
 };
+
+use crate::utils::prompt::prompt_for_value;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Blueprint {
@@ -63,16 +66,7 @@ impl Blueprint {
     pub fn execute(mut self, loc: Option<&PathBuf>) -> Result<()> {
         // generate template
         for token in &self.tokens {
-            let mut line = String::new();
-
-            println!("Enter value for {}:", token);
-
-            std::io::stdin().read_line(&mut line).unwrap();
-
-            let value = line
-                .strip_suffix("\n")
-                .unwrap_or(&line.to_string())
-                .to_owned();
+            let value = prompt_for_value(format!("Enter value for token {}:", token));
 
             self.template = self.template.replace(token, &value);
         }
