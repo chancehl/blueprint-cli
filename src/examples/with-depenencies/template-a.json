@@ -1,0 +1,6 @@
+{
+  "template": "TEMPLATE_A_FILE",
+  "tokens": [],
+  "name": "template-a",
+  "dependencies": ["template-b"]
+}

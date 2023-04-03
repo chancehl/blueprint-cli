@@ -10,14 +10,15 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
 
     let destination = arg_matches.get_one::<PathBuf>("DESTINATION");
 
-    match Blueprint::seek(blueprint_name.to_string()) {
-        Some(blueprint) => blueprint
+    if let Some(blueprint) = Blueprint::seek(blueprint_name.to_string()) {
+        blueprint
             .execute(destination)
-            .expect("Could not execute blueprint"),
-        None => {
-            eprintln!("Could not locate blueprint with name {0}. Did you mean to save instead?\n\n`blueprint save ./{0}.json`", blueprint_name)
-        }
-    };
+            .expect("Could not execute blueprint");
 
-    Ok(())
+        return Ok(());
+    } else {
+        eprintln!("Could not locate blueprint with name {0}. Did you mean to save instead? example: blueprint save ./{0}.json", blueprint_name);
+
+        return Err("MISSING_BLUEPRINT");
+    }
 }

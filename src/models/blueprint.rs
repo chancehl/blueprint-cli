@@ -9,9 +9,17 @@ use std::{
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Blueprint {
+    /// The name of the blueprint
     pub name: String,
+
+    /// The template itself
     template: String,
+
+    /// The tokens the CLI will prompt you for
     tokens: Vec<String>,
+
+    /// Other blueprints to be included when this one is executed
+    pub dependencies: Option<Vec<String>>,
 }
 
 impl From<&PathBuf> for Blueprint {
