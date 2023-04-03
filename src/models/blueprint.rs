@@ -15,10 +15,10 @@ pub struct Blueprint {
     pub name: String,
 
     /// The template itself
-    template: String,
+    pub template: String,
 
     /// The tokens the CLI will prompt you for
-    tokens: Vec<String>,
+    pub tokens: Vec<String>,
 
     /// Other blueprints to be included when this one is executed
     pub dependencies: Option<Vec<String>>,

@@ -4,6 +4,7 @@ use clap::{arg, Arg, ArgAction, Command};
 
 pub mod create;
 pub mod init;
+pub mod make;
 pub mod save;
 
 pub fn make_commands() -> Command {
@@ -26,6 +27,14 @@ pub fn make_commands() -> Command {
         .about("Initializes tool by creating the .blueprint directory for you")
         .arg(force_arg);
 
+    let make_command = Command::new("make")
+        .about("Creates a blueprint .json file from a given file")
+        .arg(
+            arg!(<TEMPLATE> "The file to use as the template")
+                .value_parser(clap::value_parser!(PathBuf)),
+        )
+        .arg_required_else_help(true);
+
     let save_command = Command::new("save")
         .about("Saves a blueprint .json file to the .blueprint folder on disk")
         .arg(
@@ -40,6 +49,7 @@ pub fn make_commands() -> Command {
         .allow_external_subcommands(true)
         .subcommand(create_command)
         .subcommand(init_command)
+        .subcommand(make_command)
         .subcommand(save_command);
 
     root_command
