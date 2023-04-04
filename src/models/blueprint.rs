@@ -90,7 +90,7 @@ impl Blueprint {
     /// Writes the blueprint's template to disk
     fn write_to_disk(&self, destination: Option<&PathBuf>) -> Result<(), &'static str> {
         let path = if let Some(destination) = destination {
-            destination.to_owned()
+            destination.join(&self.file_name)
         } else {
             PathBuf::from("./").join(&self.file_name)
         };

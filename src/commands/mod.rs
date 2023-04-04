@@ -15,20 +15,22 @@ pub fn make_commands() -> Command {
         .action(ArgAction::SetTrue);
 
     let create_command = Command::new("create")
-        .about("Creates a file from a blueprint")
+        .about("Creates a file from a blueprint template")
         .arg(arg!(<BLUEPRINT> "Which blueprint file to use"))
         .arg(
-            arg!([DESTINATION] "The desination to save the file")
+            Arg::new("DESTINATION")
+                .short('d')
+                .long("destination")
                 .value_parser(clap::value_parser!(PathBuf)),
         )
         .arg_required_else_help(true);
 
     let init_command = Command::new("init")
-        .about("Initializes tool by creating the .blueprint directory for you")
+        .about("Initializes the local repository for the user by creating a `$HOME/.blueprint` directory.")
         .arg(force_arg);
 
     let make_command = Command::new("make")
-        .about("Creates a blueprint .json file from a given file")
+        .about("Creates a blueprint template from a given file")
         .arg(
             arg!(<TEMPLATE> "The file to use as the template")
                 .value_parser(clap::value_parser!(PathBuf)),
@@ -37,7 +39,7 @@ pub fn make_commands() -> Command {
         .arg_required_else_help(true);
 
     let save_command = Command::new("save")
-        .about("Saves a blueprint .json file to the .blueprint folder on disk")
+        .about("Saves a blueprint template file to the local blueprint repository")
         .arg(
             arg!(<BLUEPRINT> "The blueprint .json file").value_parser(clap::value_parser!(PathBuf)),
         )
