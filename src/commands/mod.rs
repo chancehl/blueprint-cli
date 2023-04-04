@@ -33,6 +33,7 @@ pub fn make_commands() -> Command {
             arg!(<TEMPLATE> "The file to use as the template")
                 .value_parser(clap::value_parser!(PathBuf)),
         )
+        .arg(Arg::new("NAME").short('n').long("name"))
         .arg_required_else_help(true);
 
     let save_command = Command::new("save")
