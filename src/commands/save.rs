@@ -9,6 +9,7 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
         .expect("You must provide the blueprint .json file location");
 
     let file_contents = fs::read_to_string(blueprint_from).expect("Could not read file");
+
     let blueprint_dir = BlueprintRepository::new()
         .to_pathbuf()
         .expect("Could not initialize blueprint repository");
@@ -35,7 +36,9 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
             );
         }
         Err(err) => {
-            eprintln!("Error while running save command: {:?}", err)
+            eprintln!("Error while running save command: {:?}", err);
+
+            return Err("SAVE_ERROR");
         }
     }
 
