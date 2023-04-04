@@ -10,7 +10,7 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
 
     let destination = arg_matches.get_one::<PathBuf>("DESTINATION");
 
-    if let Some(blueprint) = Blueprint::seek(blueprint_name.to_string()) {
+    if let Some(mut blueprint) = Blueprint::seek(blueprint_name.to_string()) {
         blueprint
             .execute(destination)
             .expect("Could not execute blueprint");

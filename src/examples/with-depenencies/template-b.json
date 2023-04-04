@@ -2,5 +2,6 @@
   "template": "TEMPLATE_B_FILE_BAR",
   "tokens": ["BAR"],
   "name": "template-b",
-  "dependencies": []
+  "dependencies": [],
+  "file_name": "BAR_B.txt"
 }

@@ -17,9 +17,15 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), Box<dyn Error>> {
 
     let blueprint_json = serde_json::to_string(&Blueprint {
         name: name.to_string(),
-        dependencies: Some(Vec::new()),
         template: contents,
         tokens: Vec::new(),
+        dependencies: Some(Vec::new()),
+        file_name: template
+            .file_name()
+            .expect("Could not locate file name")
+            .to_os_string()
+            .into_string()
+            .unwrap(),
     })
     .expect("Could not convert template to json");
 

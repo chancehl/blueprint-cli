@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use serde_json::Result;
 use std::{
     env,
     fs::{self, File},
@@ -22,6 +21,9 @@ pub struct Blueprint {
 
     /// Other blueprints to be included when this one is executed
     pub dependencies: Option<Vec<String>>,
+
+    /// The name of the file to create when .execute() is called
+    pub file_name: String,
 }
 
 impl From<&PathBuf> for Blueprint {
@@ -61,33 +63,43 @@ impl Blueprint {
     }
 
     /// Executes the blueprint, asking for template variables and writing to disk or console
-    pub fn execute(mut self, loc: Option<&PathBuf>) -> Result<()> {
+    pub fn execute(&mut self, destination: Option<&PathBuf>) -> Result<(), &'static str> {
         // generate template
         for token in &self.tokens {
             let value = prompt_for_value(format!("Enter value for token {}:", token));
 
             self.template = self.template.replace(token, &value);
+            self.file_name = self.file_name.replace(token, &value);
         }
 
         // execute siblings if they exist
-        if let Some(deps) = self.dependencies {
+        if let Some(deps) = &self.dependencies {
             for dep in deps {
-                if let Some(blueprint) = Blueprint::seek(dep) {
-                    blueprint.execute(loc).expect("Could not execute blueprint")
+                if let Some(mut blueprint) = Blueprint::seek(dep.to_string()) {
+                    blueprint
+                        .execute(destination)
+                        .expect("Could not execute blueprint")
                 }
             }
         }
 
         // write file to disk
-        if let Some(path) = loc {
-            let mut output =
-                File::create(path).expect(&format!("Could not create output file at {:?}", path));
+        self.write_to_disk(destination)
+    }
 
-            write!(output, "{}", self.template)
-                .expect(&format!("Could not write to output file at {:?}", path));
+    /// Writes the blueprint's template to disk
+    fn write_to_disk(&self, destination: Option<&PathBuf>) -> Result<(), &'static str> {
+        let path = if let Some(destination) = destination {
+            destination.to_owned()
         } else {
-            println!("{:?}", self.template);
+            PathBuf::from("./").join(&self.file_name)
         };
+
+        let mut output =
+            File::create(&path).expect(&format!("Could not create output file at {:?}", &path));
+
+        write!(output, "{}", self.template)
+            .expect(&format!("Could not write to output file at {:?}", path));
 
         Ok(())
     }

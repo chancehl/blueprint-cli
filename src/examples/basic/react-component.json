@@ -1,5 +1,6 @@
 {
   "template": "import React from 'react';\n\nconst TEST_TOKEN_1 = () => { \n    return <div>{TEST_TOKEN_2}</div>\n};\n\nexport { TEST_TOKEN_1 as default };",
   "tokens": ["TEST_TOKEN_1", "TEST_TOKEN_2"],
-  "name": "react-component"
+  "name": "react-component",
+  "file_name": "TEST_TOKEN_1.tsx"
 }
