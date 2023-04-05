@@ -1,4 +1,5 @@
 use clap::ArgMatches;
+use colored::Colorize;
 use std::path::PathBuf;
 
 use crate::models::blueprint::Blueprint;
@@ -15,10 +16,12 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
             .execute(destination)
             .expect("Could not execute blueprint");
 
-        return Ok(());
+        println!("{} Blueprint executed successfully.", "✔".green());
     } else {
         eprintln!("Could not locate blueprint with name {0}. Did you mean to save instead? example: blueprint save ./{0}.json", blueprint_name);
 
         return Err("MISSING_BLUEPRINT");
     }
+
+    Ok(())
 }
