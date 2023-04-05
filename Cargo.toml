@@ -2,6 +2,8 @@
 name = "mochi"
 version = "0.1.0"
 edition = "2021"
+description = "A simple file scaffolding tool"
+license = "MIT"
 
 [[bin]]
 name = "bp"
