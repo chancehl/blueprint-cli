@@ -18,7 +18,7 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), Box<dyn Error>> {
 
     let contents = fs::read_to_string(file).expect("Could not read template file");
 
-    let blueprint_json = serde_json::to_string(&Blueprint {
+    let json = serde_json::to_string(&Blueprint {
         name: name.to_string(),
         template: contents,
         tokens: Vec::new(),
@@ -36,11 +36,11 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), Box<dyn Error>> {
         .to_pathbuf()
         .expect("Could not find blueprint repository");
 
-    let output = blueprint_repo.join(format!("{}.json", name.clone()));
+    let destination = blueprint_repo.join(format!("{}.json", name.clone()));
 
-    fs::write(&output, blueprint_json).expect(&format!("Could not write to {:?}", &output));
+    fs::write(&destination, json).expect(&format!("Could not write to {:?}", &destination));
 
-    println!("Saved blueprint {} to {:?}", name.clone(), &output);
+    println!("Saved blueprint {} to {:?}", name.clone(), &destination);
 
     Ok(())
 }

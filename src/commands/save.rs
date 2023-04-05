@@ -25,17 +25,17 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
                 return Err(".blueprint dir does not exist");
             }
 
-            let blueprint_to = blueprint_dir.join(format!("{}.json", blueprint.name));
+            let destination = blueprint_dir.join(format!("{}.json", blueprint.name));
 
-            fs::copy(blueprint_file, &blueprint_to).expect(&format!(
+            fs::copy(blueprint_file, &destination).expect(&format!(
                 "Could not write file to {}",
-                blueprint_to.display()
+                destination.display()
             ));
 
             println!(
                 "Saved blueprint {} to {}",
                 &blueprint.name,
-                &blueprint_to.display()
+                &destination.display()
             );
         }
         Err(err) => {
