@@ -14,7 +14,7 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
 
     let file_contents = fs::read_to_string(blueprint_file).expect("Could not read file");
 
-    let blueprint_dir = BlueprintRepository::new(RepositoryType::LOCAL)
+    let blueprint_dir = BlueprintRepository::new(RepositoryType::Local)
         .to_pathbuf()
         .expect("Could not initialize blueprint repository");
 
@@ -28,8 +28,8 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
 
             let destination = blueprint_dir.join(format!("{}.json", blueprint.name));
 
-            fs::copy(blueprint_file, &destination).unwrap_or_else(|_| panic!("Could not write file to {}",
-                destination.display()));
+            fs::copy(blueprint_file, &destination)
+                .unwrap_or_else(|_| panic!("Could not write file to {}", destination.display()));
 
             println!(
                 "{} Saved blueprint {} to {}",

@@ -11,7 +11,7 @@ use crate::{
 pub fn handler(arg_matches: &ArgMatches) -> Result<(), Box<dyn Error>> {
     let force = arg_matches.get_flag("FORCE");
 
-    match BlueprintRepository::new(RepositoryType::LOCAL).to_pathbuf() {
+    match BlueprintRepository::new(RepositoryType::Local).to_pathbuf() {
         Ok(path) => {
             if path.exists() && force {
                 let response = prompt_for_value(format!("{} This will remove local blueprint repository ({}) & all files within. Proceed? y/n:", "Warning!".yellow(), path.to_str().unwrap()));

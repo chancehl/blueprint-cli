@@ -4,8 +4,8 @@ use std::{
 };
 
 pub enum RepositoryType {
-    LOCAL,
-    _REMOTE,
+    Local,
+    _Remote,
 }
 
 pub struct BlueprintRepository {

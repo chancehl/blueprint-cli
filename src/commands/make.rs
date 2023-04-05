@@ -33,13 +33,14 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), Box<dyn Error>> {
     })
     .expect("Could not convert template to json");
 
-    let blueprint_repo = BlueprintRepository::new(RepositoryType::LOCAL)
+    let blueprint_repo = BlueprintRepository::new(RepositoryType::Local)
         .to_pathbuf()
         .expect("Could not find blueprint repository");
 
     let destination = blueprint_repo.join(format!("{}.json", name));
 
-    fs::write(&destination, json).unwrap_or_else(|_| panic!("Could not write to {:?}", destination));
+    fs::write(&destination, json)
+        .unwrap_or_else(|_| panic!("Could not write to {:?}", destination));
 
     println!(
         "{} Successfully made blueprint from file {:?}",
