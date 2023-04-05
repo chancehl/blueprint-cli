@@ -50,7 +50,7 @@ impl Blueprint {
             let contents = &fs::read_to_string(template.unwrap().path())
                 .expect("Could not read template file");
 
-            let blueprint_json = serde_json::from_str::<Blueprint>(&contents);
+            let blueprint_json = serde_json::from_str::<Blueprint>(contents);
 
             if let Ok(blueprint) = blueprint_json {
                 if blueprint.name == name {
@@ -96,10 +96,10 @@ impl Blueprint {
         };
 
         let mut output =
-            File::create(&path).expect(&format!("Could not create output file at {:?}", &path));
+            File::create(&path).unwrap_or_else(|_| panic!("Could not create output file at {:?}", &path));
 
         write!(output, "{}", self.template)
-            .expect(&format!("Could not write to output file at {:?}", path));
+            .unwrap_or_else(|_| panic!("Could not write to output file at {:?}", path));
 
         Ok(())
     }

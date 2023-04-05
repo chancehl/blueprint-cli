@@ -28,10 +28,8 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
 
             let destination = blueprint_dir.join(format!("{}.json", blueprint.name));
 
-            fs::copy(blueprint_file, &destination).expect(&format!(
-                "Could not write file to {}",
-                destination.display()
-            ));
+            fs::copy(blueprint_file, &destination).unwrap_or_else(|_| panic!("Could not write file to {}",
+                destination.display()));
 
             println!(
                 "{} Saved blueprint {} to {}",

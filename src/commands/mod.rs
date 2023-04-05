@@ -48,7 +48,9 @@ pub fn make_commands() -> Command {
         )
         .arg_required_else_help(true);
 
-    let root_command = Command::new("git")
+    
+
+    Command::new("git")
         .about("A simple cli for creating files from templates")
         .subcommand_required(true)
         .arg_required_else_help(true)
@@ -56,7 +58,5 @@ pub fn make_commands() -> Command {
         .subcommand(create_command)
         .subcommand(init_command)
         .subcommand(make_command)
-        .subcommand(save_command);
-
-    root_command
+        .subcommand(save_command)
 }

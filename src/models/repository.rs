@@ -24,7 +24,7 @@ impl BlueprintRepository {
     pub fn to_pathbuf(&self) -> Result<PathBuf, VarError> {
         match self.to_str() {
             Ok(loc) => Ok(PathBuf::from(loc)),
-            Err(e) => return Err(e),
+            Err(e) => Err(e),
         }
     }
 

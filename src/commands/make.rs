@@ -39,7 +39,7 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), Box<dyn Error>> {
 
     let destination = blueprint_repo.join(format!("{}.json", name));
 
-    fs::write(&destination, json).expect(&format!("Could not write to {:?}", destination));
+    fs::write(&destination, json).unwrap_or_else(|_| panic!("Could not write to {:?}", destination));
 
     println!(
         "{} Successfully made blueprint from file {:?}",
