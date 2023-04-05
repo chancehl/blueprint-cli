@@ -48,9 +48,7 @@ pub fn make_commands() -> Command {
         )
         .arg_required_else_help(true);
 
-    
-
-    Command::new("git")
+    Command::new("blueprint")
         .about("A simple cli for creating files from templates")
         .subcommand_required(true)
         .arg_required_else_help(true)
