@@ -2,12 +2,15 @@ use std::{error::Error, fs};
 
 use clap::ArgMatches;
 
-use crate::{models::repository::BlueprintRepository, utils::prompt::prompt_for_value};
+use crate::{
+    models::repository::{BlueprintRepository, RepositoryType},
+    utils::prompt::prompt_for_value,
+};
 
 pub fn handler(arg_matches: &ArgMatches) -> Result<(), Box<dyn Error>> {
     let force = arg_matches.get_flag("FORCE");
 
-    match BlueprintRepository::new().to_pathbuf() {
+    match BlueprintRepository::new(RepositoryType::LOCAL).to_pathbuf() {
         Ok(path) => {
             if path.exists() && force {
                 let response = prompt_for_value(format!("This will remove the directory located at {:?} and all files within. Proceed? y/n:", path));

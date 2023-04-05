@@ -2,7 +2,10 @@ use std::{error::Error, fs, path::PathBuf};
 
 use clap::ArgMatches;
 
-use crate::models::{blueprint::Blueprint, repository::BlueprintRepository};
+use crate::models::{
+    blueprint::Blueprint,
+    repository::{BlueprintRepository, RepositoryType},
+};
 
 pub fn handler(arg_matches: &ArgMatches) -> Result<(), Box<dyn Error>> {
     let file = arg_matches
@@ -29,7 +32,7 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), Box<dyn Error>> {
     })
     .expect("Could not convert template to json");
 
-    let blueprint_repo = BlueprintRepository::new()
+    let blueprint_repo = BlueprintRepository::new(RepositoryType::LOCAL)
         .to_pathbuf()
         .expect("Could not find blueprint repository");
 

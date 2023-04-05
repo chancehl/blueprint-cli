@@ -1,7 +1,10 @@
 use clap::ArgMatches;
 use std::{fs, path::PathBuf};
 
-use crate::models::{blueprint::Blueprint, repository::BlueprintRepository};
+use crate::models::{
+    blueprint::Blueprint,
+    repository::{BlueprintRepository, RepositoryType},
+};
 
 pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
     let blueprint_file = arg_matches
@@ -10,7 +13,7 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
 
     let file_contents = fs::read_to_string(blueprint_file).expect("Could not read file");
 
-    let blueprint_dir = BlueprintRepository::new()
+    let blueprint_dir = BlueprintRepository::new(RepositoryType::LOCAL)
         .to_pathbuf()
         .expect("Could not initialize blueprint repository");
 

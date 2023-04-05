@@ -14,9 +14,9 @@ pub struct BlueprintRepository {
 
 impl BlueprintRepository {
     /// Initializes a new Blueprint repository
-    pub fn new() -> Self {
+    pub fn new(kind: RepositoryType) -> Self {
         BlueprintRepository {
-            _kind: RepositoryType::LOCAL, // always hardcode this to local for now
+            _kind: kind, // always hardcode this to local for now
         }
     }
 
