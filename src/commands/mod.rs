@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use clap::{arg, Arg, ArgAction, Command};
+use clap::{Arg, ArgAction, Command};
 
 pub mod create;
 pub mod init;
