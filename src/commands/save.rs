@@ -21,7 +21,7 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
     match serde_json::from_str::<Blueprint>(&file_contents) {
         Ok(blueprint) => {
             if !blueprint_dir.exists() {
-                eprintln!("Looks like the {:?} directory does not exist. Tip: you can run `blueprint init` to create this directory.", blueprint_dir.as_os_str());
+                eprintln!("Looks like the {:?} directory does not exist. Tip: you can run `blueprint init` to create this directory.", blueprint_dir.to_str().unwrap());
 
                 return Err(".blueprint dir does not exist");
             }
