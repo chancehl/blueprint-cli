@@ -1,73 +1,64 @@
-name: "Release"
+on: [push, pull_request]
 
-permissions:
-  contents: "write"
-
-on:
-  workflow_run:
-    workflows: ["Tag"]
-    types:
-      - "completed"
+name: Continuous integration
 
 jobs:
-  get-tag:
-    name: "Get Tag From Package Version"
-    runs-on: "ubuntu-latest"
-    outputs:
-      pkg-version: ${{ steps.pkg-version.outputs.PKG_VERSION }}
+  check:
+    name: Check
+    runs-on: ubuntu-latest
     steps:
-      - name: "Check out the repo"
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          profile: minimal
+          toolchain: stable
+          override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: check
 
-      - name: "Get tag"
-        id: "pkg-version"
-        shell: "bash"
-        run: |
-          echo PKG_VERSION=$(awk -F ' = ' '$1 ~ /version/ { gsub(/["]/, "", $2); printf("%s",$2) }' Cargo.toml) >> $GITHUB_OUTPUT
-
-  create-release:
-    name: "Create release"
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    needs: "get-tag"
-    runs-on: "ubuntu-latest"
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
     steps:
-      - name: "Check out the repo"
-        uses: actions/checkout@v3
-
-      - name: "Create release"
-        uses: "taiki-e/create-gh-release-action@v1"
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
         with:
-          # (optional) Path to changelog.
-          # changelog: CHANGELOG.md
-          branch: "main"
-          ref: refs/tags/v${{ needs.get-tag.outputs.pkg-version }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          profile: minimal
+          toolchain: stable
+          override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test
 
-  upload-assets:
-    name: "Upload assets to Github releases"
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    needs:
-      - "get-tag"
-      - "create-release"
-    strategy:
-      matrix:
-        include:
-          - target: "x86_64-unknown-linux-gnu"
-            os: "ubuntu-latest"
-          - target: "x86_64-unknown-linux-musl"
-            os: "ubuntu-latest"
-    runs-on: ${{ matrix.os }}
+  fmt:
+    name: Rustfmt
+    runs-on: ubuntu-latest
     steps:
-      - name: "Check out the repo"
-        uses: actions/checkout@v3
-
-      - name: "Upload Binaries"
-        uses: "taiki-e/upload-rust-binary-action@v1"
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
         with:
-          bin: "blueprint"
-          target: ${{ matrix.target }}
-          archive: $bin-${{ matrix.target }}
-          ref: refs/tags/v${{ needs.get-tag.outputs.pkg-version }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          profile: minimal
+          toolchain: stable
+          override: true
+      - run: rustup component add rustfmt
+      - uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+
+  clippy:
+    name: Clippy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - run: rustup component add clippy
+      - uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -- -D warnings
