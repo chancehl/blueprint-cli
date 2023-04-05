@@ -5,22 +5,22 @@ use clap::ArgMatches;
 use crate::models::{blueprint::Blueprint, repository::BlueprintRepository};
 
 pub fn handler(arg_matches: &ArgMatches) -> Result<(), Box<dyn Error>> {
-    let template = arg_matches
-        .get_one::<PathBuf>("TEMPLATE")
+    let file = arg_matches
+        .get_one::<PathBuf>("FILE")
         .expect("Template file location required");
 
     let name = arg_matches
         .get_one::<String>("NAME")
-        .expect("Name required");
+        .expect("Missing --name flag");
 
-    let contents = fs::read_to_string(template).expect("Could not read template file");
+    let contents = fs::read_to_string(file).expect("Could not read template file");
 
     let blueprint_json = serde_json::to_string(&Blueprint {
         name: name.to_string(),
         template: contents,
         tokens: Vec::new(),
         dependencies: Some(Vec::new()),
-        file_name: template
+        file_name: file
             .file_name()
             .expect("Could not locate file name")
             .to_os_string()

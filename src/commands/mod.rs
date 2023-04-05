@@ -16,7 +16,7 @@ pub fn make_commands() -> Command {
 
     let create_command = Command::new("create")
         .about("Creates a file from a blueprint template")
-        .arg(arg!(<BLUEPRINT> "Which blueprint file to use"))
+        .arg(Arg::new("BLUEPRINT").required(true))
         .arg(
             Arg::new("DESTINATION")
                 .short('d')
@@ -32,16 +32,19 @@ pub fn make_commands() -> Command {
     let make_command = Command::new("make")
         .about("Creates a blueprint template from a given file")
         .arg(
-            arg!(<TEMPLATE> "The file to use as the template")
+            Arg::new("FILE")
+                .required(true)
                 .value_parser(clap::value_parser!(PathBuf)),
         )
-        .arg(Arg::new("NAME").short('n').long("name"))
+        .arg(Arg::new("NAME").short('n').long("name").required(true))
         .arg_required_else_help(true);
 
     let save_command = Command::new("save")
         .about("Saves a blueprint template file to the local blueprint repository")
         .arg(
-            arg!(<BLUEPRINT> "The blueprint .json file").value_parser(clap::value_parser!(PathBuf)),
+            Arg::new("FILE")
+                .required(true)
+                .value_parser(clap::value_parser!(PathBuf)),
         )
         .arg_required_else_help(true);
 

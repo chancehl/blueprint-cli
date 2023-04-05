@@ -4,11 +4,11 @@ use std::{fs, path::PathBuf};
 use crate::models::{blueprint::Blueprint, repository::BlueprintRepository};
 
 pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
-    let blueprint_from = arg_matches
-        .get_one::<PathBuf>("BLUEPRINT")
-        .expect("You must provide the blueprint .json file location");
+    let blueprint_file = arg_matches
+        .get_one::<PathBuf>("FILE")
+        .expect("Missing file");
 
-    let file_contents = fs::read_to_string(blueprint_from).expect("Could not read file");
+    let file_contents = fs::read_to_string(blueprint_file).expect("Could not read file");
 
     let blueprint_dir = BlueprintRepository::new()
         .to_pathbuf()
@@ -24,7 +24,7 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
 
             let blueprint_to = blueprint_dir.join(format!("{}.json", blueprint.name));
 
-            fs::copy(blueprint_from, &blueprint_to).expect(&format!(
+            fs::copy(blueprint_file, &blueprint_to).expect(&format!(
                 "Could not write file to {}",
                 blueprint_to.display()
             ));
