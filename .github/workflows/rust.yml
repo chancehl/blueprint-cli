@@ -21,9 +21,9 @@ jobs:
           - target: wasm32-wasi
             archive: zip tar.gz
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@master
       - name: Compile and release
-        uses: rust-build/rust-build.action@main
+        uses: rust-build/rust-build.action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -42,9 +42,9 @@ jobs:
       matrix:
         target: [x86_64-unknown-linux-musl]
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@master
       - name: Compile and release
-        uses: rust-build/rust-build.action@main
+        uses: rust-build/rust-build.action@master
         with:
           RUSTTARGET: ${{ matrix.target }}
           UPLOAD_MODE: none
