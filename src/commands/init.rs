@@ -1,6 +1,7 @@
 use std::{error::Error, fs};
 
 use clap::ArgMatches;
+use colored::Colorize;
 
 use crate::{
     models::repository::{BlueprintRepository, RepositoryType},
@@ -13,7 +14,7 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), Box<dyn Error>> {
     match BlueprintRepository::new(RepositoryType::LOCAL).to_pathbuf() {
         Ok(path) => {
             if path.exists() && force {
-                let response = prompt_for_value(format!("This will remove the directory located at {:?} and all files within. Proceed? y/n:", path));
+                let response = prompt_for_value(format!("{} This will remove local blueprint repository ({}) & all files within. Proceed? y/n:", "Warning!".yellow(), path.to_str().unwrap()));
 
                 if response.to_lowercase() != "y" {
                     eprintln!("Input was not \"y\", aborting");
@@ -34,8 +35,9 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), Box<dyn Error>> {
             }
 
             println!(
-                "Successfully initialized CLI. The following were created:\n* {:?}",
-                path
+                "{} Successfully created {} folder",
+                "✔".green(),
+                path.to_str().unwrap()
             );
 
             Ok(())

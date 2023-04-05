@@ -1,4 +1,5 @@
 use clap::ArgMatches;
+use colored::Colorize;
 use std::{fs, path::PathBuf};
 
 use crate::models::{
@@ -33,7 +34,8 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
             ));
 
             println!(
-                "Saved blueprint {} to {}",
+                "{} Saved blueprint {} to {}",
+                "✔".green(),
                 &blueprint.name,
                 &destination.display()
             );

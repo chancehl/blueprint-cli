@@ -1,6 +1,7 @@
 use std::{error::Error, fs, path::PathBuf};
 
 use clap::ArgMatches;
+use colored::Colorize;
 
 use crate::models::{
     blueprint::Blueprint,
@@ -36,11 +37,15 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), Box<dyn Error>> {
         .to_pathbuf()
         .expect("Could not find blueprint repository");
 
-    let destination = blueprint_repo.join(format!("{}.json", name.clone()));
+    let destination = blueprint_repo.join(format!("{}.json", name));
 
-    fs::write(&destination, json).expect(&format!("Could not write to {:?}", &destination));
+    fs::write(&destination, json).expect(&format!("Could not write to {:?}", destination));
 
-    println!("Saved blueprint {} to {:?}", name.clone(), &destination);
+    println!(
+        "{} Successfully made blueprint from file {:?}",
+        "✔".green(),
+        file
+    );
 
     Ok(())
 }
