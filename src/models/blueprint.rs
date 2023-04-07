@@ -1,3 +1,4 @@
+use colored::Colorize;
 use serde::{Deserialize, Serialize};
 use std::{
     env,
@@ -64,6 +65,9 @@ impl Blueprint {
 
     /// Executes the blueprint, asking for template variables and writing to disk or console
     pub fn execute(&mut self, destination: Option<&PathBuf>) -> Result<(), &'static str> {
+        // log
+        println!("{} executing blueprint {}", "◇".green(), self.name);
+
         // generate template
         for token in &self.tokens {
             let value = prompt_for_value(format!("Enter value for token {}:", token));
@@ -95,8 +99,8 @@ impl Blueprint {
             PathBuf::from("./").join(&self.file_name)
         };
 
-        let mut output =
-            File::create(&path).unwrap_or_else(|_| panic!("Could not create output file at {:?}", &path));
+        let mut output = File::create(&path)
+            .unwrap_or_else(|_| panic!("Could not create output file at {:?}", &path));
 
         write!(output, "{}", self.template)
             .unwrap_or_else(|_| panic!("Could not write to output file at {:?}", path));
