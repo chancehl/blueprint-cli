@@ -66,7 +66,7 @@ impl Blueprint {
     /// Executes the blueprint, asking for template variables and writing to disk or console
     pub fn execute(&mut self, destination: Option<&PathBuf>) -> Result<(), &'static str> {
         // log
-        println!("{} executing blueprint {}", "◇".green(), self.name);
+        println!("{} Executing blueprint {}", "◇".green(), self.name);
 
         // generate template
         for token in &self.tokens {
