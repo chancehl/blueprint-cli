@@ -99,6 +99,13 @@ impl Blueprint {
             PathBuf::from("./").join(&self.file_name)
         };
 
+        let parent_dir = path
+            .parent()
+            .unwrap_or_else(|| panic!("Could not determine output location from {:?}", path));
+
+        fs::create_dir_all(parent_dir)
+            .unwrap_or_else(|_| panic!("Could not create output directory at {:?}", &parent_dir));
+
         let mut output = File::create(&path)
             .unwrap_or_else(|_| panic!("Could not create output file at {:?}", &path));
 
