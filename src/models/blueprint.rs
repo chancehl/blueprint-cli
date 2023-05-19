@@ -84,6 +84,8 @@ impl Blueprint {
 
                 self.template = self.template.replace(token, &value);
                 self.file_name = self.file_name.replace(token, &value);
+
+                context.insert(token.to_string(), value);
             }
         }
 
