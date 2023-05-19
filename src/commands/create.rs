@@ -1,6 +1,6 @@
 use clap::ArgMatches;
 use colored::Colorize;
-use std::path::PathBuf;
+use std::{collections::HashMap, path::PathBuf};
 
 use crate::models::blueprint::Blueprint;
 
@@ -13,7 +13,7 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), &'static str> {
 
     if let Some(mut blueprint) = Blueprint::seek(blueprint_name.to_string()) {
         blueprint
-            .execute(destination)
+            .execute(destination, &mut HashMap::new())
             .expect("Could not execute blueprint");
 
         println!("{} Blueprint executed successfully.", "✔".green());

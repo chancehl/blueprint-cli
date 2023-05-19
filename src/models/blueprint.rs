@@ -1,6 +1,7 @@
 use colored::Colorize;
 use serde::{Deserialize, Serialize};
 use std::{
+    collections::HashMap,
     env,
     fs::{self, File},
     io::Write,
@@ -9,7 +10,7 @@ use std::{
 
 use crate::utils::prompt::prompt_for_value;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Blueprint {
     /// The name of the blueprint
     pub name: String,
@@ -25,6 +26,7 @@ pub struct Blueprint {
 
     /// The name of the file to create when .execute() is called
     pub file_name: String,
+    // pub execution_context: HashMap<String, String>,
 }
 
 impl From<&PathBuf> for Blueprint {
@@ -64,16 +66,25 @@ impl Blueprint {
     }
 
     /// Executes the blueprint, asking for template variables and writing to disk or console
-    pub fn execute(&mut self, destination: Option<&PathBuf>) -> Result<(), &'static str> {
+    pub fn execute(
+        &mut self,
+        destination: Option<&PathBuf>,
+        context: &mut HashMap<String, String>,
+    ) -> Result<(), &'static str> {
         // log
         println!("{} Executing blueprint {}", "◇".green(), self.name);
 
         // generate template
         for token in &self.tokens {
-            let value = prompt_for_value(format!("Enter value for token {}:", token));
+            if let Some(cached_value) = context.get(token) {
+                self.template = self.template.replace(token, cached_value);
+                self.file_name = self.file_name.replace(token, cached_value);
+            } else {
+                let value = prompt_for_value(format!("Enter value for token {}:", token));
 
-            self.template = self.template.replace(token, &value);
-            self.file_name = self.file_name.replace(token, &value);
+                self.template = self.template.replace(token, &value);
+                self.file_name = self.file_name.replace(token, &value);
+            }
         }
 
         // execute siblings if they exist
@@ -81,7 +92,7 @@ impl Blueprint {
             for dep in deps {
                 if let Some(mut blueprint) = Blueprint::seek(dep.to_string()) {
                     blueprint
-                        .execute(destination)
+                        .execute(destination, context)
                         .expect("Could not execute blueprint")
                 }
             }

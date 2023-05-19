@@ -4,7 +4,7 @@ use clap::ArgMatches;
 use colored::Colorize;
 
 use crate::models::{
-    blueprint::Blueprint,
+    blueprint_builder::BlueprintBuilder,
     repository::{BlueprintRepository, RepositoryType},
 };
 
@@ -19,19 +19,22 @@ pub fn handler(arg_matches: &ArgMatches) -> Result<(), Box<dyn Error>> {
 
     let contents = fs::read_to_string(file).expect("Could not read template file");
 
-    let json = serde_json::to_string(&Blueprint {
-        name: name.to_string(),
-        template: contents,
-        tokens: Vec::new(),
-        dependencies: Some(Vec::new()),
-        file_name: file
-            .file_name()
-            .expect("Could not locate file name")
-            .to_os_string()
-            .into_string()
-            .unwrap(),
-    })
-    .expect("Could not convert template to json");
+    let file_name = file
+        .file_name()
+        .expect("Could not locate file name")
+        .to_os_string()
+        .into_string()
+        .unwrap();
+
+    let blueprint = BlueprintBuilder::new()
+        .set_name(name.to_string())
+        .set_template(contents)
+        .set_tokens(Vec::new())
+        .set_file_name(file_name)
+        .build()
+        .expect("Could not create blueprint object");
+
+    let json = serde_json::to_string(&blueprint).expect("Could not convert template to json");
 
     let blueprint_repo = BlueprintRepository::new(RepositoryType::Local)
         .to_pathbuf()
