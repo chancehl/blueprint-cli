@@ -80,7 +80,8 @@ impl Blueprint {
                 self.template = self.template.replace(token, cached_value);
                 self.file_name = self.file_name.replace(token, cached_value);
             } else {
-                let value = prompt_for_value(format!("Enter value for token {}:", token));
+                let value =
+                    prompt_for_value(format!("Enter value for token {}:", token.green().bold()));
 
                 self.template = self.template.replace(token, &value);
                 self.file_name = self.file_name.replace(token, &value);
