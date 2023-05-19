@@ -8,7 +8,7 @@ Blueprint (binary `bp` or `blueprint`) is a simple file scaffolding tool that le
 
 ### (Easiest) Are you a Rustacean? 🦀
 
-Run `cargo install blueprint-cli`. Afterwards you should be able to run the program like this:
+Run `cargo install blueprint-cli`.
 
 ### Semi-automated installation 🚙
 
