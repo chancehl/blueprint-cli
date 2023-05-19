@@ -72,7 +72,7 @@ impl Blueprint {
         context: &mut HashMap<String, String>,
     ) -> Result<(), &'static str> {
         // log
-        println!("{} Executing blueprint {}", "◇".green(), self.name);
+        println!("{} Executing blueprint: {}", "◇".green(), self.name.green());
 
         // generate template
         for token in &self.tokens {
@@ -80,8 +80,7 @@ impl Blueprint {
                 self.template = self.template.replace(token, cached_value);
                 self.file_name = self.file_name.replace(token, cached_value);
             } else {
-                let value =
-                    prompt_for_value(format!("Enter value for token {}:", token.green().bold()));
+                let value = prompt_for_value(format!("Enter value for token {}:", token.bold()));
 
                 self.template = self.template.replace(token, &value);
                 self.file_name = self.file_name.replace(token, &value);
