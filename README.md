@@ -25,7 +25,7 @@ $ tar -xf SOME_FOLDER\blueprint-x86_64-apple-darwin.tar.gz
 $ mv SOME_FOLDER/blueprint-x86_64-apple-darwin/blueprint /usr/bin
 
 # Gives the binary permissions to run
-$ chmod +755 /usr/bin/blueprint
+$ chmod 755 /usr/bin/blueprint
 
 # Refresh terminal
 $ source ~/.bashrc
