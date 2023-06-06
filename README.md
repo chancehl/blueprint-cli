@@ -42,7 +42,7 @@ $ source ~/.bashrc
 4. Download the appropriate file for your operating system
 5. Extract the binaries
 6. (MacOS/Linux users) copy the file to your `/usr/bin` or `/usr/local/bin` directory
-7. (MacOS/Linux users) run `chmod +755` on the binary you moved to the `bin` folders
+7. (MacOS/Linux users) run `chmod 755` on the binary you moved to the `bin` folders
 
 ## Usage
 
